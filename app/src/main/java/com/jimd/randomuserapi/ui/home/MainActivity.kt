@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jimd.randomuserapi.data.local.entities.ResultadoEntity
 import com.jimd.randomuserapi.databinding.ActivityMainBinding
 import com.jimd.randomuserapi.ui.PerfilActivity
@@ -29,11 +31,26 @@ class MainActivity : AppCompatActivity() {
             viewModel.getUser()
         }
 
+        viewModel.loading.observe(this, Observer {
+            binding.progressBarMain.isVisible = it
+        })
+
+
         viewModel.getAllUser().observe(this, Observer {
             binding.RVUsers.layoutManager = LinearLayoutManager(this)
             binding.RVUsers.adapter = HomeAdapter(it,{borrar(it)},{onPerfil(it)})
         })
 
+        binding.RVUsers.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy>0){
+                    binding.btnAddUsers.hide()
+                }else{
+                    binding.btnAddUsers.show()
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
 
     }
     fun borrar(resultadoEntity: ResultadoEntity){

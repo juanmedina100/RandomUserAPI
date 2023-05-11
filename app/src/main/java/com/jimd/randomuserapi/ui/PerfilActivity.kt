@@ -30,6 +30,9 @@ class PerfilActivity : AppCompatActivity() {
         viewModel.usuarioID.observe(this, Observer {
             binding.txtNamePerfil.text = it.name
             binding.txtEmailPerfil.text = it.email
+            binding.txtCellPerfil.text = it.cell
+            binding.txtGenderPerfil.text = it.gender
+            binding.txtNatPerfil.text = it.nat
             Picasso.get().load(it.picture).into(binding.imageView)
         })
     }

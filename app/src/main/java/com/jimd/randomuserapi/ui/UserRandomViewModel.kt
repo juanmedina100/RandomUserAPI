@@ -19,8 +19,8 @@ class UserRandomViewModel @Inject constructor(
     private val randomRepository: RandomRepository
 ): ViewModel() {
 
-    private val _random = MutableLiveData<List<ResultadoModel>>()
-    val random = _random
+    private val _loading = MutableLiveData<Boolean>()
+    val loading = _loading
 
     private val _usuarioID = MutableLiveData<ResultadoEntity>()
     val usuarioID = _usuarioID
@@ -46,11 +46,10 @@ class UserRandomViewModel @Inject constructor(
 
 
     fun getAllUser():LiveData<List<ResultadoEntity>>{
-//        val randomA = randomRepository.getAllUser().map {
-//            _random.postValue(it)
-//        }
-        Log.i("random","getAllUser : ")
-        return randomRepository.getAllUser()
+        _loading.value=true
+        val random = randomRepository.getAllUser()
+        _loading.value=false
+        return random
     }
 
     fun deleteUser(resultadoEntity: ResultadoEntity){
